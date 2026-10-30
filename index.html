@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colegio San Ignacio - English Department | Famous Movies Quiz</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        oxford: {
+                            800: '#001833',
+                            900: '#002147', // Oxford Blue
+                            950: '#00142e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .oxford-bg {
+            background-color: #002147;
+        }
+        .custom-radio:checked + label {
+            border-color: #002147;
+            background-color: #f0f4f8;
+        }
+        .custom-radio:checked + label .radio-circle {
+            border-color: #002147;
+            background-color: #002147;
+        }
+        .custom-radio:checked + label .radio-circle-inner {
+            display: block;
+        }
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <div>
+        <!-- HEADER COMPONENT -->
+        <header class="oxford-bg text-white shadow-lg mb-8 border-b-4 border-amber-400">
+            <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider text-amber-300 uppercase mb-3">
+                    <i class="fa-solid fa-graduation-cap"></i> Recursos Didácticos de Inglés
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-black tracking-wide uppercase text-white">
+                    COLEGIO SAN IGNACIO
+                </h1>
+                <p class="text-amber-300 text-base sm:text-lg font-semibold mt-1 tracking-tight">
+                    English Department • Movie Knowledge Activity
+                </p>
+                <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                    "Famous Movies Quiz" — Interactive Cinema & Culture Trivia
+                </p>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+            <!-- Activity Instructions Banner -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="p-2.5 bg-indigo-50 text-oxford-900 rounded-xl">
+                        <i class="fa-solid fa-film text-xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-oxford-900">Famous Movies Quiz</h2>
+                        <p class="text-xs text-slate-500">20 Questions on Iconic Films, Actors, and Directors</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed mt-2">
+                    Welcome! Select your grade and name from the list below, then answer all 20 questions about famous movies. Once completed, click "Check and Show Results" to review your score and download your official Word report (.doc) for submission to Google Classroom.
+                </p>
+            </div>
+
+            <!-- FORM CONTAINER -->
+            <form id="quizForm" class="space-y-6" onsubmit="handleFormSubmit(event)">
+
+                <!-- Student Identification Box -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="oxford-bg px-6 py-4 text-white font-semibold text-base flex items-center justify-between border-b-2 border-amber-400">
+                        <span class="flex items-center"><i class="fa-solid fa-id-card mr-3 text-amber-400"></i> Student Identification</span>
+                        <span class="text-xs bg-white/20 text-white px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Obligatorio</span>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        
+                        <!-- Grade Selection -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-800 mb-2">
+                                Select your class <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="flex items-center p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                    <input type="radio" name="grade" value="9th grade A" required onchange="onGradeChange('9th grade A')" class="w-4 h-4 text-oxford-900 focus:ring-oxford-900">
+                                    <span class="ml-3 font-semibold text-slate-700 text-sm">9th grade A</span>
+                                </label>
+                                <label class="flex items-center p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                    <input type="radio" name="grade" value="9th grade B" required onchange="onGradeChange('9th grade B')" class="w-4 h-4 text-oxford-900 focus:ring-oxford-900">
+                                    <span class="ml-3 font-semibold text-slate-700 text-sm">9th grade B</span>
+                                </label>
+                                <label class="flex items-center p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                    <input type="radio" name="grade" value="9th grade C" required onchange="onGradeChange('9th grade C')" class="w-4 h-4 text-oxford-900 focus:ring-oxford-900">
+                                    <span class="ml-3 font-semibold text-slate-700 text-sm">9th grade C</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Student Dropdown -->
+                        <div id="studentNameContainer" class="hidden">
+                            <label for="studentName" class="block text-sm font-bold text-slate-800 mb-1">
+                                Select your name <span class="text-rose-500">*</span>
+                            </label>
+                            <select id="studentName" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-oxford-900 focus:border-oxford-900 outline-none transition bg-white text-sm">
+                                <option value="">-- Select your name --</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <h2 class="text-xl font-bold text-oxford-900 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-amber-500"></i> Movie Questions (1–20)
+                    </h2>
+                    <span class="text-xs text-rose-500 font-bold">* Campos obligatorios</span>
+                </div>
+
+                <!-- Dynamic Questions Container -->
+                <div id="questionsContainer" class="space-y-6"></div>
+
+                <!-- Error Banner -->
+                <div id="errorBanner" class="hidden bg-rose-50 border-2 border-rose-400 rounded-2xl p-5 text-rose-900 text-sm flex items-start shadow-md">
+                    <i class="fa-solid fa-circle-exclamation text-rose-600 text-2xl mr-4 flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <h4 class="font-bold text-rose-900 text-base mb-1">Atención: Formulario Incompleto</h4>
+                        <p id="errorMessage" class="text-xs sm:text-sm text-rose-800 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 pb-12 flex flex-col sm:flex-row items-center justify-end gap-3">
+                    <button type="button" onclick="handleWordDownloadAttempt()" class="w-full sm:w-auto px-6 py-3.5 bg-slate-700 hover:bg-slate-800 active:bg-slate-900 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-file-word text-blue-400 text-lg mr-2"></i> Download Report (.doc)
+                    </button>
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3.5 oxford-bg hover:bg-oxford-800 text-white font-bold rounded-xl shadow-lg hover:shadow-oxford-900/20 transition flex items-center justify-center text-base">
+                        <i class="fa-solid fa-square-check mr-2 text-amber-400 text-lg"></i> Check and Show Results
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- Modal Results Window -->
+            <div id="resultsModal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden my-auto border border-slate-200">
+                    
+                    <!-- Modal Header -->
+                    <div class="oxford-bg px-6 py-5 text-white flex items-center justify-between border-b-2 border-amber-400">
+                        <div>
+                            <div class="text-xs text-amber-300 uppercase tracking-widest font-bold">COLEGIO SAN IGNACIO</div>
+                            <h2 class="text-xl font-black text-white">Informe de Resultados del Estudiante</h2>
+                            <p id="resultStudentInfo" class="text-slate-300 text-xs mt-0.5"></p>
+                        </div>
+                        <button onclick="closeResults()" class="text-slate-300 hover:text-white p-2 text-xl transition">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-6 overflow-y-auto space-y-6">
+                        
+                        <!-- Score Summary Box -->
+                        <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center space-x-4">
+                                <div id="scoreBadge" class="w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-extrabold text-white shadow-md">
+                                    <!-- Dynamic Badge -->
+                                </div>
+                                <div>
+                                    <div class="text-xs uppercase tracking-wider text-slate-500 font-bold">Score</div>
+                                    <div class="text-2xl font-black text-slate-800" id="scoreText">0 / 20</div>
+                                    <div class="text-xs font-semibold text-slate-600" id="scorePercentage">0% de logro</div>
+                                </div>
+                            </div>
+                            <div id="feedbackMessage" class="text-xs font-medium max-w-xs text-slate-600 border-t sm:border-t-0 sm:border-l border-slate-200 pt-3 sm:pt-0 sm:pl-5">
+                                <!-- Feedback text -->
+                            </div>
+                        </div>
+
+                        <!-- Instruction for submission -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                            <i class="fa-solid fa-file-arrow-up text-amber-600 text-lg mt-0.5"></i>
+                            <div class="text-xs text-amber-900 leading-snug">
+                                <strong>Entrega para Google Classroom:</strong> Haz clic en el botón <strong>"Descargar Informe Word (.doc)"</strong> para guardar el archivo con el desglose de tus respuestas y adjuntarlo a tu tarea.
+                            </div>
+                        </div>
+
+                        <h3 class="text-base font-bold text-oxford-900 border-b pb-2">Revisión de Respuestas</h3>
+
+                        <!-- Breakdown Container -->
+                        <div id="resultsBreakdown" class="space-y-4"></div>
+
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <button onclick="closeResults()" class="w-full sm:w-auto px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg transition">
+                            Cerrar y Volver
+                        </button>
+                        <button onclick="downloadWordDoc()" class="w-full sm:w-auto px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs rounded-lg shadow-md transition flex items-center justify-center">
+                            <i class="fa-solid fa-download mr-2"></i> Descargar Informe Word (.doc)
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FOOTER COMPONENT -->
+    <footer class="oxford-bg text-white mt-12 border-t-4 border-amber-400 py-6 no-print">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-xs sm:text-sm font-semibold tracking-wide text-white">
+                Colegio San Ignacio • Recursos Didácticos de Inglés e Interactividad Digital
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Student Database
+        const studentsData = {
+            "9th grade A": [
+                "Acevedo Ponce Felipe Ademar",
+                "Aguilar Becerra Antonia",
+                "Alarcón Quiroz Andrés Felipe",
+                "Alvarado Ortiz Isidora Pilar",
+                "Castillo Turres Catalina Sofía",
+                "Cavieres Pasmino Eloísa Mercedes",
+                "Centonzio Calderón Emily Raffaella",
+                "Contreras San Martín Eva Ignacia",
+                "Figueroa González María Consuelo",
+                "Fuenzalida Parra Pedro",
+                "Galdames Durán Francisca Antonia",
+                "Gatica Knaak Vicente Ignacio",
+                "González Encina Santiago Vicente",
+                "Inzunza Cifuentes Nicolás Guillermo",
+                "Lagos Urra Leticia Carolina",
+                "Mouat Aburto Martina Paz",
+                "Orellana Beltrán Monserrat Francisca",
+                "Ortiz Donoso Matilda Florencia",
+                "Pfeng Gaspar Laura Amalia",
+                "Pinochet Pinochet Alonso Eduardo",
+                "Pinto Bastías Inti Benjamín",
+                "Pizarro Paredes Sofía Ignacia",
+                "Plaza Pereira Martín Alejandro",
+                "Ponce Melero Francisca Ignacia",
+                "Quinteros Mondiglio Raimundo Patricio",
+                "Ramírez Bravo Francisco",
+                "Ramírez Palacios Daniel Esteban",
+                "Rivera Tudela Ignacio Alonso",
+                "Riveros Reveco Amanda",
+                "Rojas Albornoz Benjamín Alejandro",
+                "Rubio Núñez Leonardo Alonso",
+                "Soto Neira Amancay Rocío",
+                "Valdés Velásquez Max Alejandro",
+                "Valencia Zuzunaga Dhiamet Stefan",
+                "Vergara Montenegro Rafaela Sofía",
+                "Vergara Rojas Sofía María Susana",
+                "Vides Correa María Paz",
+                "Zapata Arancibia Agustín Andrés"
+            ],
+            "9th grade B": [
+                "Alarcón Vielma Maximiliano",
+                "Amigo Piceros Amaro Jesús",
+                "Aravena Albornoz Carlos Arturo",
+                "Barrera Jaque Santiago Ernesto",
+                "Carrasco Lazo Emilia Ignacia",
+                "Cornejo Cáceres Laura Elena",
+                "Eyzaguirre Silva Josefa Ignacia",
+                "Farías Andrade Arturo Daniel",
+                "Fonseca Chong Matilda Isidora",
+                "Fredes Silva Martina Sofía",
+                "García Ávila Rafaela Amparo",
+                "García Isla Cristóbal",
+                "Henríquez Miranda Matías Francisco",
+                "Leal Guzmán Álvaro Fernando",
+                "Luengo Valencia Lucas Fabián",
+                "Méndez Sáez Catalina Ignacia",
+                "Mora Palma Victoria Alejandra",
+                "Nilo Miranda Rosario",
+                "Ojeda Vera Joaquín Ignacio",
+                "Olea Solís Eloísa Antonia",
+                "Olivares Fincheira Guillermo Tomás",
+                "Padilla Burchard Felipe Ignacio",
+                "Páez Hidalgo Montserrat Ignacia",
+                "Palacios Solari Javier Agustín",
+                "Quiroz Peña Agustina",
+                "Riveros Álvarez Diego Arturo",
+                "Rojas Edmonds Florencia Antonia Angélica",
+                "San Martín Arias Magdalena Esperanza",
+                "Sánchez Moraga Cristóbal Arturo",
+                "Sarria Astudillo Esteban Alonso",
+                "Stager Aguilera Francisca Emilia",
+                "Valdenegro Román Vicente Maximiliano",
+                "Valderas Ortega Facundo Nicanor",
+                "Valenzuela González José Tomás",
+                "Vermeer Gutiérrez Anouk",
+                "Villagra Alarcón Sofía Antonieta"
+            ],
+            "9th grade C": [
+                "Aburto Romero Diego Esteban",
+                "Araya Escalona María Jesús",
+                "Bravo Zapata Isidora Francisca",
+                "Cáceres Arredondo Isidora Montserrat",
+                "Castillo Reichhardt Valentín",
+                "Espinosa Bravo Carlos Joaquín",
+                "Espinoza Ojeda Camila Ignacia",
+                "Evert Quinteros Alisson Fernanda",
+                "González Marzán Mateo Alfredo",
+                "Hernández Martínez Francisco Javier",
+                "Hiplan Godoy Santino Luis",
+                "Leal Rubio Isidora Ignacia",
+                "Montenegro Ramos Ignacio",
+                "Moya Madero Joaquín Esteban",
+                "Navarro Bravo Amanda Sofía",
+                "Osorio Vivar Víctor André",
+                "Pavez Veliz Clemente",
+                "Pinto Celis Martín Ignacio",
+                "Poblete Espinoza Florencia Antonia",
+                "Prieto Alarcón Mayte Antonia",
+                "Ramírez Ávila Abril Lucía",
+                "Reveco Rojas Ignacia",
+                "Riffo Fernández Agustín Alonso",
+                "Salazar Quiroga Simón Ismael",
+                "Salinas Gómez Isidora Agustina",
+                "Sandoval Acevedo Javiera Ignacia",
+                "Schüller Vásquez Santiago Ernesto",
+                "Seccia Orellana Ignacio Agustín",
+                "Seisdedos Carvajal Loreto Paz",
+                "Solorzano Torres Mateo Gaspar",
+                "Valdés Oyarzún Moira Carolina Denisse",
+                "Veliz Joo Consuelo Alejandra",
+                "Villena Arriagada Javiera Paz",
+                "Zegers Silva Amelia",
+                "Zurita Bustos Franco Salvador"
+            ]
+        };
+
+        // Questions Database for Famous Movies Quiz (1 to 20)
+        const questionsData = [
+            {
+                id: 1,
+                question: "1. Which actor plays the part of Luke Skywalker in the Star Wars films?",
+                options: ["Harrison Ford", "Mark Hamill", "Ewan McGregor", "Tom Cruise"],
+                correct: 1
+            },
+            {
+                id: 2,
+                question: "2. Simba and Nala are characters from which animated movie?",
+                options: ["The Lion King", "Madagascar", "Finding Nemo", "Tarzan"],
+                correct: 0
+            },
+            {
+                id: 3,
+                question: "3. Which of these iconic films is set in a futuristic dystopian world?",
+                options: ["The Godfather", "The Matrix", "Gladiator", "Jurassic Park"],
+                correct: 1
+            },
+            {
+                id: 4,
+                question: "4. Which of these films has a plot based on real events?",
+                options: ["Inception", "Oppenheimer", "Avatar", "Interstellar"],
+                correct: 1
+            },
+            {
+                id: 5,
+                question: "5. Who won an Academy Award for best actor for his performance in Joker (2019)?",
+                options: ["Joaquin Phoenix", "Christian Bale", "Leonardo DiCaprio", "Heath Ledger"],
+                correct: 0
+            },
+            {
+                id: 6,
+                question: "6. Who starred with Leonardo DiCaprio in the 1997 classic film Titanic?",
+                options: ["Julia Roberts", "Anne Hathaway", "Kate Winslet", "Scarlett Johansson"],
+                correct: 2
+            },
+            {
+                id: 7,
+                question: "7. Which of these classic sci-fi films relied mostly on practical special effects and animatronics instead of modern digital CGI?",
+                options: ["Jurassic Park (1993)", "Avatar: The Way of Water", "Avengers: Endgame", "Ready Player One"],
+                correct: 0
+            },
+            {
+                id: 8,
+                question: "8. Which of these animated films received massive praise from both audiences and critics, winning the Academy Award for Best Animated Feature in 2002?",
+                options: ["Spirited Away", "Shark Tale", "Chicken Little", "Bee Movie"],
+                correct: 0
+            },
+            {
+                id: 9,
+                question: "9. Which director is famous for creating the iconic sci-fi film Interstellar and the superhero trilogy The Dark Knight?",
+                options: ["Steven Spielberg", "Christopher Nolan", "James Cameron", "Quentin Tarantino"],
+                correct: 1
+            },
+            {
+                id: 10,
+                question: "10. Which iconic movie features the famous line, \"May the Force be with you\"?",
+                options: ["Star Trek", "Star Wars", "Guardians of the Galaxy", "Dune"],
+                correct: 1
+            },
+            {
+                id: 11,
+                question: "11. Which actor plays the part of Iron Man / Tony Stark in the Marvel Cinematic Universe?",
+                options: ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+                correct: 1
+            },
+            {
+                id: 12,
+                question: "12. Elsa, Anna, and Olaf are characters from which animated film?",
+                options: ["Tangled", "Brave", "Frozen", "Moana"],
+                correct: 2
+            },
+            {
+                id: 13,
+                question: "13. Which of these iconic films is set in ancient Rome?",
+                options: ["Gladiator", "Troy", "300", "Braveheart"],
+                correct: 0
+            },
+            {
+                id: 14,
+                question: "14. Which of these films has a plot based on real events surrounding World War II?",
+                options: ["Dunkirk", "The Hunger Games", "Avatar", "Top Gun: Maverick"],
+                correct: 0
+            },
+            {
+                id: 15,
+                question: "15. Who won an Academy Award for Best Actor for his performance in The Revenant (2015)?",
+                options: ["Brad Pitt", "Johnny Depp", "Leonardo DiCaprio", "Matthew McConaughey"],
+                correct: 2
+            },
+            {
+                id: 16,
+                question: "16. Who starred with Ryan Gosling in the 2016 musical film La La Land?",
+                options: ["Emma Stone", "Jennifer Lawrence", "Anne Hathaway", "Margot Robbie"],
+                correct: 0
+            },
+            {
+                id: 17,
+                question: "17. Which of these iconic classic films relied on practical special effects instead of CGI for its famous shark?",
+                options: ["Jaws", "The Meg", "Deep Blue Sea", "Shark Tale"],
+                correct: 0
+            },
+            {
+                id: 18,
+                question: "18. Which of these Pixar animated films received immense praise from audiences and critics, winning the Academy Award for Best Animated Feature in 2004?",
+                options: ["Cars", "The Incredibles", "Shark Tale", "Monsters University"],
+                correct: 1
+            },
+            {
+                id: 19,
+                question: "19. Which director is famous for creating the iconic sci-fi movies E.T. the Extra-Terrestrial, Jurassic Park, and Schindler's List?",
+                options: ["James Cameron", "Steven Spielberg", "George Lucas", "Ridley Scott"],
+                correct: 1
+            },
+            {
+                id: 20,
+                question: "20. Which iconic movie features the famous line, \"I'm going to make him an offer he can't refuse\"?",
+                options: ["Scarface", "Goodfellas", "The Godfather", "Pulp Fiction"],
+                correct: 2
+            }
+        ];
+
+        // Global State Variable
+        let evaluatedResults = null;
+
+        // Render Questions on Load
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questionsData.forEach((q) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4";
+                
+                let optionsHTML = '';
+                q.options.forEach((opt, optIndex) => {
+                    const inputId = `q${q.id}_opt${optIndex}`;
+                    optionsHTML += `
+                        <div class="relative flex items-center">
+                            <input type="radio" id="${inputId}" name="question_${q.id}" value="${optIndex}" class="custom-radio hidden" required>
+                            <label for="${inputId}" class="w-full flex items-center p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition text-sm text-slate-700 font-medium">
+                                <span class="radio-circle w-5 h-5 rounded-full border-2 border-slate-300 mr-3 flex items-center justify-center flex-shrink-0 transition">
+                                    <span class="radio-circle-inner w-2 h-2 rounded-full bg-white hidden"></span>
+                                </span>
+                                <span>${opt}</span>
+                            </label>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="font-bold text-slate-900 text-base flex items-start justify-between gap-3">
+                        <span>${q.question}</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        ${optionsHTML}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Handle Grade Change
+        function onGradeChange(grade) {
+            const nameContainer = document.getElementById('studentNameContainer');
+            const studentSelect = document.getElementById('studentName');
+            
+            studentSelect.innerHTML = '<option value="">-- Select your name --</option>';
+            
+            if (studentsData[grade]) {
+                studentsData[grade].forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student;
+                    option.textContent = student;
+                    studentSelect.appendChild(option);
+                });
+                nameContainer.classList.remove('hidden');
+            } else {
+                nameContainer.classList.add('hidden');
+            }
+        }
+
+        // Form Submit & Evaluation
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const errorBanner = document.getElementById('errorBanner');
+            const errorMessage = document.getElementById('errorMessage');
+
+            const selectedGrade = document.querySelector('input[name="grade"]:checked');
+            const selectedStudent = document.getElementById('studentName').value;
+
+            if (!selectedGrade || !selectedStudent) {
+                errorMessage.textContent = "Por favor selecciona tu curso y elige tu nombre de la lista antes de continuar.";
+                errorBanner.classList.remove('hidden');
+                window.scrollTo({ top: errorBanner.offsetTop - 100, behavior: 'smooth' });
+                return;
+            }
+
+            let unanswered = [];
+            let answers = {};
+            let score = 0;
+
+            questionsData.forEach(q => {
+                const selectedOpt = document.querySelector(`input[name="question_${q.id}"]:checked`);
+                if (!selectedOpt) {
+                    unanswered.push(q.id);
+                } else {
+                    const val = parseInt(selectedOpt.value);
+                    answers[q.id] = val;
+                    if (val === q.correct) {
+                        score++;
+                    }
+                }
+            });
+
+            if (unanswered.length > 0) {
+                errorMessage.textContent = `Debes responder todas las preguntas. Faltan por responder: Pregunta(s) ${unanswered.join(', ')}.`;
+                errorBanner.classList.remove('hidden');
+                window.scrollTo({ top: errorBanner.offsetTop - 100, behavior: 'smooth' });
+                return;
+            }
+
+            errorBanner.classList.add('hidden');
+
+            evaluatedResults = {
+                grade: selectedGrade.value,
+                student: selectedStudent,
+                score: score,
+                total: questionsData.length,
+                answers: answers
+            };
+
+            showResultsModal(evaluatedResults);
+        }
+
+        // Results Display
+        function showResultsModal(data) {
+            document.getElementById('resultStudentInfo').textContent = `${data.student} • ${data.grade}`;
+            document.getElementById('scoreText').textContent = `${data.score} / ${data.total}`;
+            const pct = Math.round((data.score / data.total) * 100);
+            document.getElementById('scorePercentage').textContent = `${pct}% de logro`;
+
+            const badge = document.getElementById('scoreBadge');
+            const feedback = document.getElementById('feedbackMessage');
+
+            if (pct >= 80) {
+                badge.className = "w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-extrabold text-white shadow-md bg-emerald-600";
+                badge.textContent = "A";
+                feedback.textContent = "¡Excelente desempeño! Tienes un conocimiento excepcional sobre películas icónicas.";
+            } else if (pct >= 60) {
+                badge.className = "w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-extrabold text-white shadow-md bg-amber-500";
+                badge.textContent = "B";
+                feedback.textContent = "¡Buen trabajo! Has acertado la mayoría de las preguntas de cine.";
+            } else {
+                badge.className = "w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-extrabold text-white shadow-md bg-rose-600";
+                badge.textContent = "C";
+                feedback.textContent = "¡Buen intento! Revisa tus respuestas para conocer más sobre estas películas famosas.";
+            }
+
+            const breakdown = document.getElementById('resultsBreakdown');
+            breakdown.innerHTML = '';
+
+            questionsData.forEach(q => {
+                const userAns = data.answers[q.id];
+                const isCorrect = userAns === q.correct;
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border ${isCorrect ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'} space-y-2`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="font-bold text-xs sm:text-sm text-slate-800">${q.question}</span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-bold ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                            ${isCorrect ? 'Correcta' : 'Incorrecta'}
+                        </span>
+                    </div>
+                    <div class="text-xs space-y-1">
+                        <p class="text-slate-700"><strong>Tu respuesta:</strong> ${q.options[userAns]}</p>
+                        ${!isCorrect ? `<p class="text-emerald-800"><strong>Respuesta correcta:</strong> ${q.options[q.correct]}</p>` : ''}
+                    </div>
+                `;
+                breakdown.appendChild(card);
+            });
+
+            document.getElementById('resultsModal').classList.remove('hidden');
+        }
+
+        function closeResults() {
+            document.getElementById('resultsModal').classList.add('hidden');
+        }
+
+        function handleWordDownloadAttempt() {
+            if (!evaluatedResults) {
+                const selectedGrade = document.querySelector('input[name="grade"]:checked');
+                const selectedStudent = document.getElementById('studentName').value;
+                const errorBanner = document.getElementById('errorBanner');
+                const errorMessage = document.getElementById('errorMessage');
+
+                if (!selectedGrade || !selectedStudent) {
+                    errorMessage.textContent = "Por favor completa la identificación y presiona 'Check and Show Results' antes de descargar el informe.";
+                    errorBanner.classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('quizForm').requestSubmit();
+            } else {
+                downloadWordDoc();
+            }
+        }
+
+        // Download Word Report Generator
+        function downloadWordDoc() {
+            if (!evaluatedResults) return;
+
+            const d = evaluatedResults;
+            const pct = Math.round((d.score / d.total) * 100);
+
+            let questionsTableRows = '';
+            questionsData.forEach(q => {
+                const userAns = d.answers[q.id];
+                const isCorrect = userAns === q.correct;
+                questionsTableRows += `
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 11px; text-align: center;">${q.id}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; font-size: 11px;">${q.question}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; font-size: 11px;">${q.options[userAns]}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; font-size: 11px; color: ${isCorrect ? '#166534' : '#991b1b'}; font-weight: bold;">
+                            ${isCorrect ? 'Correcta' : 'Incorrecta (' + q.options[q.correct] + ')'}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            const htmlContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head>
+                    <meta charset='utf-8'>
+                    <title>Informe de Resultados - English Movies Quiz</title>
+                    <style>
+                        body { font-family: 'Calibri', 'Arial', sans-serif; color: #1e293b; line-height: 1.4; }
+                        .header { text-align: center; background-color: #002147; color: white; padding: 20px; border-bottom: 4px solid #f59e0b; }
+                        .title { font-size: 18pt; font-weight: bold; margin: 0; }
+                        .subtitle { font-size: 12pt; color: #fef3c7; margin-top: 5px; }
+                        .info-box { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; margin: 20px 0; border-radius: 6px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th { background-color: #002147; color: white; padding: 8px; border: 1px solid #002147; font-size: 11px; text-align: left; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="title">COLEGIO SAN IGNACIO</div>
+                        <div class="subtitle">English Department • Famous Movies Quiz</div>
+                        <div style="font-size: 10pt; color: #cbd5e1; margin-top: 5px;">Cinema Trivia Knowledge Worksheet</div>
+                    </div>
+
+                    <div class="info-box">
+                        <p style="margin: 3px 0; font-size: 11pt;"><strong>Student:</strong> ${d.student}</p>
+                        <p style="margin: 3px 0; font-size: 11pt;"><strong>Class:</strong> ${d.grade}</p>
+                        <p style="margin: 3px 0; font-size: 11pt;"><strong>Score Obtained:</strong> ${d.score} / ${d.total} (${pct}% de logro)</p>
+                        <p style="margin: 3px 0; font-size: 10pt; color: #64748b;"><strong>Evaluation Date:</strong> ${new Date().toLocaleDateString('es-CL')}</p>
+                    </div>
+
+                    <h3 style="color: #002147; font-size: 13pt; border-bottom: 2px solid #002147; padding-bottom: 4px;">Detalle de Respuestas</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 45%;">Pregunta</th>
+                                <th style="width: 25%;">Respuesta Seleccionada</th>
+                                <th style="width: 25%;">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${questionsTableRows}
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 30px; border-top: 1px solid #cbd5e1; padding-top: 10px; font-size: 9pt; color: #94a3b8; text-align: center;">
+                        Documento generado automáticamente para entrega en Google Classroom • Colegio San Ignacio
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(['\ufeff' + htmlContent], {
+                type: 'application/msword'
+            });
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Reporte_English_${d.student.replace(/\s+/g, '_')}_Famous_Movies_Quiz.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', renderQuestions);
+    </script>
+</body>
+</html>
